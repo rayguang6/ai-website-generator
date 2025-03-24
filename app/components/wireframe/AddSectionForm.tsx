@@ -48,6 +48,42 @@ const SECTION_TEMPLATES: Record<string, any> = {
       }
     ]
   },
+  pricing: {
+    heading: "Pricing Plans",
+    subheading: "Choose the plan that works for you",
+    tiers: [
+      {
+        name: "Basic",
+        price: "$9/mo",
+        description: "All the basics for getting started",
+        features: ["Feature 1", "Feature 2", "Feature 3"],
+        isPopular: false,
+        cta: "Get Started"
+      },
+      {
+        name: "Pro",
+        price: "$29/mo",
+        description: "Everything you need for a growing business",
+        features: ["Feature 1", "Feature 2", "Feature 3", "Feature 4", "Feature 5"],
+        isPopular: true,
+        cta: "Get Started"
+      }
+    ]
+  },
+  contact: {
+    heading: "Contact Us",
+    subheading: "We'd love to hear from you",
+    email: "contact@example.com",
+    phone: "+1 (555) 123-4567",
+    address: "123 Main St, City, Country",
+    formFields: ["Name", "Email", "Message"]
+  },
+  cta: {
+    heading: "Ready to get started?",
+    subheading: "Join thousands of satisfied customers today",
+    buttonText: "Get Started",
+    buttonUrl: "#signup"
+  },
   footer: {
     logo: "Company Name",
     menuGroups: [
@@ -148,6 +184,9 @@ export default function AddSectionForm({ onAdd, onCancel }: AddSectionFormProps)
                 <option value="hero">Hero</option>
                 <option value="features">Features</option>
                 <option value="testimonials">Testimonials</option>
+                <option value="pricing">Pricing</option>
+                <option value="contact">Contact</option>
+                <option value="cta">Call to Action</option>
                 <option value="footer">Footer</option>
               </select>
             </div>
