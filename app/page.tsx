@@ -1,10 +1,9 @@
-import WireframeRenderer from './components/wireframe/WireframeRenderer';
-import { sampleWireframe } from './data/sampleWireframe';
+import AIWireframeGenerator from '@/app/components/wireframe/AIWireframeGenerator';
 
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <WireframeRenderer initialData={sampleWireframe} />
+      <AIWireframeGenerator />
     </main>
   );
 }

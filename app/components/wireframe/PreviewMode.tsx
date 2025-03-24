@@ -1,6 +1,6 @@
 'use client';
 
-import { WireframeData, Section } from '@/app/types/wireframe';
+import { Wireframe, Section } from '@/app/types/wireframe';
 import NavigationSection from './sections/NavigationSection';
 import HeroSection from './sections/HeroSection';
 import FeaturesSection from './sections/FeaturesSection';
@@ -11,11 +11,11 @@ import CTASection from './sections/CTASection';
 import FooterSection from './sections/FooterSection';
 
 interface PreviewModeProps {
-  wireframeData: WireframeData;
-  onClose: () => void;
+  wireframe: Wireframe;
+  onClose?: () => void;
 }
 
-export default function PreviewMode({ wireframeData, onClose }: PreviewModeProps) {
+export default function PreviewMode({ wireframe, onClose }: PreviewModeProps) {
   const renderSection = (section: Section) => {
     // In preview mode, we use the same section components but without the edit controls
     const previewProps = {
@@ -59,7 +59,7 @@ export default function PreviewMode({ wireframeData, onClose }: PreviewModeProps
     <div className="fixed inset-0 z-50 flex flex-col bg-white overflow-auto">
       {/* Preview header */}
       <div className="sticky top-0 bg-blue-600 text-white p-4 flex justify-between items-center shadow-md z-10">
-        <h2 className="text-xl font-semibold">Preview: {wireframeData.pageName}</h2>
+        <h2 className="text-xl font-semibold">Preview: {wireframe.pageName}</h2>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 bg-blue-700 px-3 py-2 rounded-md">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,7 +81,7 @@ export default function PreviewMode({ wireframeData, onClose }: PreviewModeProps
 
       {/* Preview content */}
       <div className="flex-1 flex flex-col overflow-auto">
-        {wireframeData.sections.map((section) => (
+        {wireframe.sections.map((section) => (
           <div key={section.id} className="w-full">
             {renderSection(section)}
           </div>

@@ -394,7 +394,9 @@ export default function HeroSection(props: SectionRendererProps) {
   
   return (
     <BaseSectionRenderer {...props}>
-      {renderHeroLayout()}
+      <div className="hero-section relative">
+        {renderHeroLayout()}
+      </div>
     </BaseSectionRenderer>
   );
 } 

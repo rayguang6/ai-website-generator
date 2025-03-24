@@ -19,28 +19,28 @@ const SectionRenderer = ({ section, onEdit, onDelete }: SectionRendererProps) =>
   
   switch (section.type) {
     case 'navigation':
-      renderedSection = <NavigationSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={true} />;
+      renderedSection = <NavigationSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={false} />;
       break;
     case 'hero':
-      renderedSection = <HeroSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={true} />;
+      renderedSection = <HeroSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={false} />;
       break;
     case 'features':
-      renderedSection = <FeaturesSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={true} />;
+      renderedSection = <FeaturesSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={false} />;
       break;
     case 'testimonials':
-      renderedSection = <TestimonialsSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={true} />;
+      renderedSection = <TestimonialsSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={false} />;
       break;
     case 'pricing':
-      renderedSection = <PricingSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={true} />;
+      renderedSection = <PricingSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={false} />;
       break;
     case 'contact':
-      renderedSection = <ContactSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={true} />;
+      renderedSection = <ContactSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={false} />;
       break;
     case 'cta':
-      renderedSection = <CTASection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={true} />;
+      renderedSection = <CTASection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={false} />;
       break;
     case 'footer':
-      renderedSection = <FooterSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={true} />;
+      renderedSection = <FooterSection section={section} onUpdate={onEdit} onDelete={() => onDelete(section.id)} onReorder={() => {}} editMode={false} />;
       break;
     default:
       renderedSection = <div>Unknown section type: {section.type}</div>;

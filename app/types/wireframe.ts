@@ -124,4 +124,11 @@ export interface WireframeData {
   pageType: 'landing' | 'product' | 'about' | 'contact' | string;
   pageName: string;
   sections: Section[];
+}
+
+export interface Wireframe extends WireframeData {
+  id?: string;
+  name: string;
+  createdAt?: string;
+  updatedAt?: string;
 } 
