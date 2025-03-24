@@ -45,8 +45,8 @@ export default function WireframeEditor({
   const sectionRefs = useRef<{[key: string]: HTMLDivElement | null}>({});
 
   useEffect(() => {
-    onWireframeChange(wireframe);
-  }, [wireframe, onWireframeChange]);
+    setWireframe(initialWireframe);
+  }, [initialWireframe]);
 
   useEffect(() => {
     // If sections change and active section is removed, select the first available section
@@ -237,69 +237,68 @@ export default function WireframeEditor({
           <div className="flex flex-col md:flex-row gap-6">
             {/* Left sidebar - Section list and selector */}
             <div className="w-full md:w-64 flex-shrink-0">
-              <SectionSelector onAddSection={handleAddSection} />
+              <SectionSelector 
+                onAddSection={handleAddSection}
+                wireframe={wireframe}
+              />
               
-              <div className="mt-6">
+              <div className="mb-6">
                 <h3 className="text-lg font-medium mb-2">Sections</h3>
-                
-                {wireframe.sections.length > 0 ? (
-                  <div className="border rounded-lg overflow-hidden">
-                    <ul className="divide-y divide-gray-200">
-                      {wireframe.sections.map((section: Section, index: number) => (
-                        <li key={section.id} className={`hover:bg-gray-50 ${section.id === activeSectionId ? 'bg-blue-50' : ''}`}>
-                          <button
-                            onClick={() => setActiveSectionId(section.id)}
-                            className="w-full px-3 py-3 flex items-center justify-between text-left"
-                          >
-                            <div className="flex items-center gap-2">
-                              <div className={`w-8 h-8 flex items-center justify-center rounded-full ${section.id === activeSectionId ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
-                                {sectionIcons[section.type] || `${index + 1}`}
-                              </div>
-                              <div>
-                                <span className="font-medium capitalize block">{section.type}</span>
-                                <span className="text-xs text-gray-500 block">{section.content.layout || 'standard'}</span>
-                              </div>
+                <div className="border rounded-lg overflow-hidden">
+                  <ul className="divide-y divide-gray-200">
+                    {wireframe.sections.map((section: Section, index: number) => (
+                      <li 
+                        key={section.id} 
+                        className={`hover:bg-gray-50 ${section.id === activeSectionId ? 'bg-blue-50' : ''}`}
+                      >
+                        <button
+                          onClick={() => setActiveSectionId(section.id)}
+                          className="w-full px-3 py-3 flex items-center justify-between text-left"
+                        >
+                          <div className="flex items-center gap-2">
+                            <div className={`w-8 h-8 flex items-center justify-center rounded-full ${section.id === activeSectionId ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
+                              {sectionIcons[section.type] || `${index + 1}`}
                             </div>
-                            <div className="flex gap-1">
+                            <div>
+                              <span className="font-medium capitalize block">{section.type}</span>
+                              <span className="text-xs text-gray-500 block">{section.content.layout || 'standard'}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            {index > 0 && (
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  const index = wireframe.sections.findIndex(s => s.id === section.id);
-                                  if (index > 0) handleMoveSection(section.id, 'up');
+                                  handleMoveSection(section.id, 'up');
                                 }}
-                                className="p-1 text-gray-400 hover:text-gray-700"
-                                disabled={wireframe.sections.indexOf(section) === 0}
+                                className="p-1 text-gray-400 hover:text-gray-600"
                                 title="Move up"
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 15l7-7 7 7" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                                 </svg>
                               </button>
+                            )}
+                            {index < wireframe.sections.length - 1 && (
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  const index = wireframe.sections.findIndex(s => s.id === section.id);
-                                  if (index < wireframe.sections.length - 1) handleMoveSection(section.id, 'down');
+                                  handleMoveSection(section.id, 'down');
                                 }}
-                                className="p-1 text-gray-400 hover:text-gray-700"
-                                disabled={wireframe.sections.indexOf(section) === wireframe.sections.length - 1}
+                                className="p-1 text-gray-400 hover:text-gray-600"
                                 title="Move down"
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                 </svg>
                               </button>
-                            </div>
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : (
-                  <div className="text-center p-4 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg">
-                    <p className="text-sm text-gray-500">No sections added yet.</p>
-                  </div>
-                )}
+                            )}
+                          </div>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
             
@@ -307,13 +306,13 @@ export default function WireframeEditor({
             <div className="flex-1 overflow-auto">
               {wireframe.sections.length > 0 ? (
                 <div className="space-y-8">
-                  {wireframe.sections.map((section: Section) => (
+                  {wireframe.sections.map((section) => (
                     <div 
-                      key={section.id} 
+                      key={`${section.id}-${section.content.layout}`} 
                       ref={(el) => { sectionRefs.current[section.id] = el; }}
                       className={`relative border ${section.id === activeSectionId ? 'border-blue-400 shadow-md' : 'border-gray-200'} rounded-lg overflow-hidden transition-all duration-200`}
                     >
-                      {/* Section header with combined info and controls */}
+                      {/* Section header with controls */}
                       <div className="sticky top-0 z-20 w-full bg-white bg-opacity-95 backdrop-blur-sm border-b flex justify-between items-center py-2 px-3">
                         <div className="flex items-center gap-2">
                           <div className={`w-8 h-8 flex items-center justify-center rounded-full ${section.id === activeSectionId ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}>
@@ -338,7 +337,7 @@ export default function WireframeEditor({
                               });
                             }}
                             className="p-1 text-gray-400 hover:text-purple-600 hover:bg-gray-100 rounded"
-                            title="Regenerate with AI"
+                            title="Change layout"
                           >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -378,7 +377,7 @@ export default function WireframeEditor({
                           <button
                             onClick={() => handleEditLayoutClick(section)}
                             className="p-1 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded"
-                            title="Change layout"
+                            title="Edit layout"
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zm10 0a1 1 0 011-1h4a1 1 0 011 1v6a1 1 0 01-1 1h-4a1 1 0 01-1-1v-6z" />

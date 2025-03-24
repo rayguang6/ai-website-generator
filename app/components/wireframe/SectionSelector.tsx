@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Section } from '@/app/types/wireframe';
+import { Section, Wireframe } from '@/app/types/wireframe';
 
 // Default content for each section type
 const defaultContents = {
@@ -144,9 +144,10 @@ const defaultContents = {
 
 interface SectionSelectorProps {
   onAddSection: (section: Section) => void;
+  wireframe: Wireframe & { allSections?: Section[] };
 }
 
-export default function SectionSelector({ onAddSection }: SectionSelectorProps) {
+export default function SectionSelector({ onAddSection, wireframe }: SectionSelectorProps) {
   const [showSectionOptions, setShowSectionOptions] = useState(false);
 
   const sectionTypes = [
@@ -182,7 +183,7 @@ export default function SectionSelector({ onAddSection }: SectionSelectorProps) 
     },
     { type: 'cta', label: 'CTA', icon: 
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H4c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h16c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1zM8.5 15H10V9H7v1.5h1.5zm4.5 0h1.5V9H12v1.5h1.5V12H12v1.5h1.5zm-8-10C3.67 5 3 5.67 3 6.5S3.67 8 4.5 8 6 7.33 6 6.5 5.33 5 4.5 5z"></path>
+        <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H4c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h16c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1z"></path>
       </svg>
     },
     { type: 'footer', label: 'Footer', icon: 
@@ -193,18 +194,42 @@ export default function SectionSelector({ onAddSection }: SectionSelectorProps) 
   ];
 
   const handleAddSection = (type: string) => {
-    const newSection: Section = {
-      id: uuidv4(),
-      type,
-      content: defaultContents[type as keyof typeof defaultContents] || {
-        title: `Sample ${type} section`,
-        description: `This is a sample ${type} section. Edit the content to customize it.`,
-        layout: 'standard'
-      }
-    };
+    // First try to find the section in allSections
+    const storedSection = wireframe.allSections?.find(section => section.type === type);
     
-    onAddSection(newSection);
-    setShowSectionOptions(false); // Hide the selector after adding
+    if (storedSection) {
+      // Create a new section with the stored content but a new ID
+      const newSection: Section = {
+        id: uuidv4(),
+        type,
+        content: {
+          ...storedSection.content,
+          layout: storedSection.content.layout || 'standard'
+        }
+      };
+      onAddSection(newSection);
+    } else {
+      // If no stored content found, try to find an existing section of the same type
+      const existingSection = wireframe.sections.find(section => section.type === type);
+      
+      // Create new section with copied content or empty content if no existing section
+      const newSection: Section = {
+        id: uuidv4(),
+        type,
+        content: existingSection ? {
+          ...existingSection.content,
+          layout: existingSection.content.layout || 'standard'
+        } : {
+          title: `New ${type} section`,
+          description: `This is a new ${type} section.`,
+          layout: 'standard'
+        }
+      };
+      
+      onAddSection(newSection);
+    }
+    
+    setShowSectionOptions(false);
   };
 
   return (
